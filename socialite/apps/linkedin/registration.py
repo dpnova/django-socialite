@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from socialite.apps.base.oauth.utils import get_unique_username
 from socialite.apps.linkedin import models
-from socialite.apps.linkedin.signals import post_register_service
+from socialite.apps.base.signals import post_register_service
 
 def register_service(user_info, unique_id=None, access_token=None, impersonate=None):
     # FIXME: massive race condition potential here

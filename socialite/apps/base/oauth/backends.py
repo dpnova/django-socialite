@@ -17,7 +17,7 @@ class BaseOauthBackend:
     def authenticate(self, client=None, access_token=None, impersonate=None):
         if client is None or access_token is None or not self.validate_service_type(getattr(client, 'base_url', None)):
             return None
-        user = self.get_existing_user(access_token, impersonate=impersonate)
+        user = self.get_existing_user(access_token)
         if user:
             return user
         import logging

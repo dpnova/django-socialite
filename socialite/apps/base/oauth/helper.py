@@ -34,7 +34,7 @@ class Client:
             url = urlparse.urljoin(self.base_url, self.actions[action])
         except KeyError:
             raise Exception("Invalid OAuth action.")
-
+        
         if token:
             if self.signature_method:
                 consumer = oauth.Consumer(self.key, self.secret)

@@ -11,7 +11,7 @@ from socialite.apps.linkedin.models import LinkedInService
 mediator = oauth_decorators.OAuthMediator(helper.oauth_client)
 
 @mediator.authorize
-def authorize(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL):
+def authorize(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL,impersonate=None):
     service, created = LinkedInService.objects.get_or_create(user=request.user, defaults={
         'token': access_token['oauth_token'],
         'secret': access_token['oauth_token_secret'],

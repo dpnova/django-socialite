@@ -119,7 +119,7 @@ def get_avatar(size, access_token=None, user_id=None, avoid_302=False, default_a
             if not access_token:
                 raise ValueError("either user_id or access_token must be given to identify the user")
             info = user_info(access_token, user_id=user_id)
-            user_id = info.get('user_id')
+            user_id = info.get('id')
         if user_id is None:
             raise ValueError("unable to identify the user from values given")
         return '%s?%s' % (urlparse.urljoin(api_url, 'users/profile_image/twitter.json'),

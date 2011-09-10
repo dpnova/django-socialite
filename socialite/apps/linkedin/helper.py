@@ -33,6 +33,8 @@ def get_unique_id(access_token, user_id=None):
 def user_info(access_token, user_id=None):
     if user_id is None:
         url = '%s?%s' % (urlparse.urljoin(api_url, 'people/~:(id,first-name,last-name,picture-url)'),"format=json")
+    else:
+        url = '%s?%s' % (urlparse.urljoin(api_url, 'people/id=%s:(id,first-name,last-name,picture-url)'%user_id),"format=json")
     info = json.loads(oauth_client.request(url, access_token))
     return info
     

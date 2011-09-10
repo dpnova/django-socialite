@@ -5,5 +5,5 @@ register = template.Library()
 
 
 @register.simple_tag()
-def user_linkedin_avatar(user):
-    return get_avatar(access_token=user.linkedinservices.all()[0].access_token)
+def linkedin_avatar(user, user_id=None):
+    return get_avatar(access_token=user.linkedinservices.all()[0].access_token, user_id=user_id)

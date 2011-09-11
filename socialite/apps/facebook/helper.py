@@ -114,3 +114,12 @@ def announce(access_token, message):
     r,c = oauth_client.request(base_uri, access_token=access_token, method="POST", body=q.urlencode())
     # TODO: handle response != 200
     return simplejson.loads(c)
+
+FACEBOOK_IMAGE_SIZES = set(['square','small','normal','large'])
+def get_avatar(access_token, user_id="me", size="large"):
+    if size not in FACEBOOK_IMAGE_SIZES:
+        raise ValueError("size must be one of %s" % FACEBOOK_IMAGE_SIZES)
+    base_uri = urlparse.urljoin(api_url, '%s/picture?type=%s' % (user_id,size))
+    r,c = oauth_client.request(base_uri, access_token=access_token)
+    print r,c
+    return simplejson.loads(c)

@@ -103,7 +103,17 @@ def get_friend_info(access_token):
     info = cache.get(CACHE_KEY)
     if info is None:
         base_uri = urlparse.urljoin(api_url, 'me/friends')
-        r,c = oauth_client.request(base_uri, access_token=access_token)
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'name',
+            'picture',
+        ]
+        params = {
+            'fields': ','.join(fields),
+        }
+        r,c = oauth_client.request(base_uri, access_token=access_token, params=params)
         # TODO: handle response != 200
         friends = simplejson.loads(c)
         info = friends['data']

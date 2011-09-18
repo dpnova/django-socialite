@@ -159,5 +159,4 @@ class Client(object):
         if access_token is not None and method == 'GET':
             args[token_param] = access_token
         uri = '%s?%s' % (base_uri, urllib.urlencode(args))
-        print uri, method, body, headers
         return self.http.request(uri, method=method, body=body, headers=headers)

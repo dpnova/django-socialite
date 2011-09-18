@@ -137,6 +137,18 @@ def announce(access_token, message):
     # TODO: handle response != 200
     return simplejson.loads(c)
 
+
+def link(access_token, link, message=None, user_id="me"):
+    base_uri = urlparse.urljoin(api_url, '%s/feed' % user_id)
+    q = get_mutable_query_dict({
+        'access_token': access_token,
+        'message': message,
+        'link':link
+    })
+    r,c = oauth_client.request(base_uri, access_token=access_token, method="POST", body=q.urlencode())
+    # TODO: handle response != 200
+    return simplejson.loads(c)
+
 FACEBOOK_IMAGE_SIZES = set(['square','small','normal','large'])
 def get_avatar(access_token, user_id="me", size="large"):
     if size not in FACEBOOK_IMAGE_SIZES:

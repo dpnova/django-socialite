@@ -98,6 +98,18 @@ def get_friend_ids(access_token):
         cache.set(CACHE_KEY, info, 60 * 5) # 5 minutes
     return info
 
+def get_friend_info(access_token):
+    CACHE_KEY = 'facebook:get_friend_info:%s' % access_token
+    info = cache.get(CACHE_KEY)
+    if info is None:
+        base_uri = urlparse.urljoin(api_url, 'me/friends')
+        r,c = oauth_client.request(base_uri, access_token=access_token)
+        # TODO: handle response != 200
+        friends = simplejson.loads(c)
+        info = friends['data']
+        cache.set(CACHE_KEY, info, 60 * 5) # 5 minutes
+    return info
+
 def find_friends(access_token):
     facebook_ids = get_friend_ids(access_token)
     friends = []
@@ -119,7 +131,12 @@ FACEBOOK_IMAGE_SIZES = set(['square','small','normal','large'])
 def get_avatar(access_token, user_id="me", size="large"):
     if size not in FACEBOOK_IMAGE_SIZES:
         raise ValueError("size must be one of %s" % FACEBOOK_IMAGE_SIZES)
-    base_uri = urlparse.urljoin(api_url, '%s/picture?type=%s' % (user_id,size))
-    r,c = oauth_client.request(base_uri, access_token=access_token)
-    print r,c
-    return simplejson.loads(c)
+    base_uri = urlparse.urljoin(api_url, '%s/picture' % (user_id,))
+    """
+    The following is here because oauth.client.request tries to fetch the image
+    which seems to block. Instead we just return the url.
+    """
+    params = {'type':size}
+    params['oauth_token'] = access_token
+    uri = '%s?%s' % (base_uri, urllib.urlencode(params))
+    return uri

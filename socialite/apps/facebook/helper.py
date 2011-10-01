@@ -138,13 +138,16 @@ def announce(access_token, message):
     return simplejson.loads(c)
 
 
-def link(access_token, link, message=None, user_id="me"):
+def link(access_token, link, message=None,picture=None, user_id="me"):
     base_uri = urlparse.urljoin(api_url, '%s/feed' % user_id)
-    q = get_mutable_query_dict({
+    q = {
         'access_token': access_token,
         'message': message,
         'link':link
-    })
+    }
+    if picture:
+        q['picture'] = picture
+    q = get_mutable_query_dict(q)
     r,c = oauth_client.request(base_uri, access_token=access_token, method="POST", body=q.urlencode())
     # TODO: handle response != 200
     return simplejson.loads(c)

@@ -2,6 +2,7 @@ import random
 import hashlib
 
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from socialite.apps.base.oauth.utils import get_unique_username
 from socialite.apps.twitter import models
@@ -20,6 +21,7 @@ def register_service(user_info, unique_id=None, access_token=None, impersonate=N
         user = service.user
 
     # update user
+    user.email = hashlib.md5(str(random.random())).hexdigest()+"@"+settings.DUMMY_EMAIL_HOST
     user.username = get_unique_username(user_info['screen_name'], user_id=user.id)
     name_parts = user_info['name'].split(' ')
     if len(name_parts) > 1:

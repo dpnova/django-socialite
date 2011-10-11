@@ -21,7 +21,8 @@ def register_service(user_info, unique_id=None, access_token=None, impersonate=N
         user = service.user
 
     # update user
-    user.email = hashlib.md5(str(random.random())).hexdigest()+"@"+settings.DUMMY_EMAIL_HOST
+    if not user.email:
+        user.email = hashlib.md5(str(random.random())).hexdigest()+"@"+settings.DUMMY_EMAIL_HOST
     user.username = get_unique_username(user_info['screen_name'], user_id=user.id)
     name_parts = user_info['name'].split(' ')
     if len(name_parts) > 1:

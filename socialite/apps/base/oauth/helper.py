@@ -72,7 +72,7 @@ class Client:
         if resp['status'] != '200':
             raise Exception("Invalid response %s." % resp['status'])
         return dict(urlparse.parse_qsl(content))
-
+    
     def request(self, url, access_token, method="GET", body=''):
         consumer = oauth.Consumer(self.key, self.secret)
         token = oauth.Token(key=access_token['oauth_token'], secret=access_token['oauth_token_secret'])

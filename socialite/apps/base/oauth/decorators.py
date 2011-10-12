@@ -39,7 +39,6 @@ class OAuthMediator(object):
             user = django_authenticate(client=self.client, access_token=access_token, impersonate=impersonate)
             if user:
                 django_login(request, user)
-        print "REDIRECT",request.session.get('redirect_to')
         redirect_to = request.session.get('redirect_to') or settings.LOGIN_REDIRECT_URL
         return view_function(request, access_token, redirect_to=redirect_to, impersonate=impersonate)
 

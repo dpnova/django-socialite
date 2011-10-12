@@ -39,6 +39,7 @@ class OAuthMediator(object):
             user = django_authenticate(client=self.client, access_token=access_token, impersonate=impersonate)
             if user:
                 django_login(request, user)
+        print "REDIRECT",request.session.get('redirect_to')
         redirect_to = request.session.get('redirect_to') or settings.LOGIN_REDIRECT_URL
         return view_function(request, access_token, redirect_to=redirect_to, impersonate=impersonate)
 
@@ -46,6 +47,11 @@ class OAuthMediator(object):
         self.view_functions[helper.AUTHORIZE] = view_function
         @login_required
         def _authorize(request):
+            redirect_to = request.REQUEST.get(self.redirect_field_name, '')
+            # Light security check -- make sure redirect_to isn't garbage.
+            if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
+                redirect_to = settings.LOGIN_REDIRECT_URL
+            request.session['redirect_to'] = redirect_to
             return self._redirect(request, helper.AUTHORIZE)
         return _authorize
 

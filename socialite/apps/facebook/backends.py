@@ -29,6 +29,7 @@ class FacebookBackend(BaseOauthBackend):
         user = User(username=get_unique_username(screen_name),
                     first_name=user_info['first_name'],
                     last_name=user_info['last_name'],
-                    password=hashlib.md5(str(random.random())).hexdigest())
+                    password=hashlib.md5(str(random.random())).hexdigest(),
+                    email=hashlib.md5(str(random.random())).hexdigest())
         user.save()
         return user

@@ -24,6 +24,8 @@ def authorize(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL):
     if created:
         message = "Facebook account added."
     else:
+        service.access_token = acess_token
+        service.save()
         message = "This Facebook account has already been adeed."
     request.user.message_set.create(message=message)
     return HttpResponseRedirect(redirect_to)

@@ -17,12 +17,12 @@ def authorize(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL, im
         'secret': access_token['oauth_token_secret'],
         'unique_id': helper.get_unique_id(access_token),
     })
-    service.token = access_token['oauth_token']
-    service.token = access_token['oauth_token_secret']
-    service.save()
     if created:
         message = "Twitter account added."
     else:
+        service.token = access_token['oauth_token']
+        service.token = access_token['oauth_token_secret']
+        service.save()
         message = "This Twitter account has already been adeed."
     request.user.message_set.create(message=message)
     return HttpResponseRedirect(redirect_to)

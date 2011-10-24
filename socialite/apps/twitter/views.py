@@ -21,7 +21,7 @@ def authorize(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL, im
         message = "Twitter account added."
     else:
         service.token = access_token['oauth_token']
-        service.token = access_token['oauth_token_secret']
+        service.secret = access_token['oauth_token_secret']
         service.save()
         message = "This Twitter account has already been adeed."
     request.user.message_set.create(message=message)

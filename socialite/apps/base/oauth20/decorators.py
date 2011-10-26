@@ -49,6 +49,13 @@ class OAuth20Mediator(object):
         self.view_functions[helper.AUTHORIZE] = view_function
         @login_required
         def _authorize(request):
+            redirect_to = request.REQUEST.get(self.redirect_field_name, '')
+            # Light security check -- make sure redirect_to isn't garbage.
+            if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
+                redirect_to = settings.LOGIN_REDIRECT_URL
+            if request.user.is_authenticated():
+                return HttpResponseRedirect(redirect_to)
+            request.session['redirect_to'] = redirect_to
             request.session[ACTION_FORMAT % self.client.oauth_base_url] = helper.AUTHORIZE
             redirect_uri = request.build_absolute_uri(reverse(self.callback))
             return HttpResponseRedirect(self.client.authorization_url(params=self.params, redirect_uri=redirect_uri))

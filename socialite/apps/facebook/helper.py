@@ -41,8 +41,10 @@ def signed(view):
         return view(request, data, *args, **kwargs)
     return _view
 
+
+import hashlib
 def users_info(access_token, ids):
-    CACHE_KEY = 'facebook:users_info:%s:%s' % (access_token, ','.join([str(i) for i in ids]))
+    CACHE_KEY = 'facebook:users_info:%s:%s' % (access_token, hashlib.md5(str(','.join([str(i) for i in ids]))).hexdigest())
     info = cache.get(CACHE_KEY)
     if info is None:
         base_uri = api_url

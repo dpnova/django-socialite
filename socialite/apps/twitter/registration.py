@@ -23,15 +23,18 @@ def register_service(user_info, unique_id=None, access_token=None, impersonate=N
     # update user
     if not user.email:
         user.email = hashlib.md5(str(random.random())).hexdigest()+"@"+settings.DUMMY_EMAIL_HOST
-    user.username = get_unique_username(user_info['screen_name'], user_id=user.id)
+    if not user.username:
+        user.username = get_unique_username(user_info['screen_name'], user_id=user.id)
     name_parts = user_info['name'].split(' ')
     if len(name_parts) > 1:
         first_name = name_parts[0]
         last_name = ' '.join(name_parts[1:])
     else:
         first_name, last_name = user_info['name'], ''
-    user.first_name = first_name
-    user.last_name = last_name
+    if not user.first_name:
+        user.first_name = first_name
+    if not user.last_name:
+        user.last_name = last_name
     user.save()
 
     # update service

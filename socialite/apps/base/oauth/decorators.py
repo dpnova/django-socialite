@@ -37,7 +37,11 @@ class OAuthMediator(object):
             return HttpResponse(t.render(RequestContext(request, {})))
 #            raise Exception("OAuth callback was not able to retrieve the needed information from the session.")
         oauth_verifier = request.GET.get('oauth_verifier')
-        access_token = self.client.access_token(request_token, verifier=oauth_verifier)
+        try:
+            access_token = self.client.access_token(request_token, verifier=oauth_verifier)
+        except Exception:
+            t = loader.get_template('auth/error.html')  
+            return HttpResponse(t.render(RequestContext(request, {})))
         if not request.user.is_authenticated():
             user = django_authenticate(client=self.client, access_token=access_token, impersonate=impersonate)
             if user:

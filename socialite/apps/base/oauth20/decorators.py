@@ -35,8 +35,11 @@ class OAuth20Mediator(object):
         access_token = request.GET.get('access_token')
         code = request.GET.get('code')
         if code and access_token is None:
-            access_token_args = self.client.access_token(code, request.build_absolute_uri(reverse(self.callback)))
-            access_token = access_token_args.get('access_token')
+            try:
+                access_token_args = self.client.access_token(code, request.build_absolute_uri(reverse(self.callback)))
+                access_token = access_token_args.get('access_token')
+            except Exception:
+                pass
         if not access_token:
 #            raise utils.Error("No access token was found. Auth failed.")
             t = loader.get_template('auth/error.html')

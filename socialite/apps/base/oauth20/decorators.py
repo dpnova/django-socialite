@@ -28,7 +28,9 @@ class OAuth20Mediator(object):
         action = request.session.get(ACTION_FORMAT % self.client.oauth_base_url)
         view_function = self.view_functions.get(action)
         if not view_function:
-            raise Exception("OAuth callback was not able to retrieve the needed information from the session.")
+            t = loader.get_template('auth/error.html')
+            return HttpResponse(t.render(RequestContext(request, {})))
+#            raise Exception("OAuth callback was not able to retrieve the needed information from the session.")
         
         access_token = request.GET.get('access_token')
         code = request.GET.get('code')
@@ -36,9 +38,9 @@ class OAuth20Mediator(object):
             access_token_args = self.client.access_token(code, request.build_absolute_uri(reverse(self.callback)))
             access_token = access_token_args.get('access_token')
         if not access_token:
-            raise utils.Error("No access token was found. Auth failed.")
-#            t = loader.get_template(access_token_template)
-#            return HttpResponse(t.render(RequestContext(request, {})))
+#            raise utils.Error("No access token was found. Auth failed.")
+            t = loader.get_template('auth/error.html')
+            return HttpResponse(t.render(RequestContext(request, {})))
 
         if not request.user.is_authenticated():
             user = self.login(request, access_token)
@@ -53,8 +55,8 @@ class OAuth20Mediator(object):
             # Light security check -- make sure redirect_to isn't garbage.
             if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
                 redirect_to = settings.LOGIN_REDIRECT_URL
-            if request.user.is_authenticated():
-                return HttpResponseRedirect(redirect_to)
+#            if request.user.is_authenticated():
+#                return HttpResponseRedirect(redirect_to)
             request.session['redirect_to'] = redirect_to
             request.session[ACTION_FORMAT % self.client.oauth_base_url] = helper.AUTHORIZE
             redirect_uri = request.build_absolute_uri(reverse(self.callback))

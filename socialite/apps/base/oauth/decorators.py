@@ -32,7 +32,9 @@ class OAuthMediator(object):
         action = request.session.get(ACTION_FORMAT % self.client.base_url)
         view_function = self.view_functions.get(action)
         if not (request_token and view_function):
-            raise Exception("OAuth callback was not able to retrieve the needed information from the session.")
+            t = loader.get_template('auth/error.html')
+            return HttpResponse(t.render(RequestContext(request, {})))
+#            raise Exception("OAuth callback was not able to retrieve the needed information from the session.")
         oauth_verifier = request.GET.get('oauth_verifier')
         access_token = self.client.access_token(request_token, verifier=oauth_verifier)
         if not request.user.is_authenticated():

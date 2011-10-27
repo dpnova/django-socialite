@@ -28,7 +28,9 @@ class OAuth20Mediator(object):
         action = request.session.get(ACTION_FORMAT % self.client.oauth_base_url)
         view_function = self.view_functions.get(action)
         if not view_function:
-            raise Exception("OAuth callback was not able to retrieve the needed information from the session.")
+            t = loader.get_template('auth/error.html')
+            return HttpResponse(t.render(RequestContext(request, {})))
+#            raise Exception("OAuth callback was not able to retrieve the needed information from the session.")
         
         access_token = request.GET.get('access_token')
         code = request.GET.get('code')

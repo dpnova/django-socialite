@@ -28,4 +28,4 @@ def authorize(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL,imp
 def authenticate(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL, impersonate=None):
     if request.user.is_authenticated():
         return HttpResponseRedirect(redirect_to)
-    return HttpResponse('fail!') # TODO: real response
+    return HttpResponse('fail! did you forget to add the right backend to your settings??') # TODO: real response

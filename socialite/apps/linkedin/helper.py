@@ -43,3 +43,10 @@ def get_avatar(access_token=None,user_id=None):
     info = user_info(access_token,user_id)
     return info['pictureUrl']
     
+    
+def get_connections(access_token):
+    url = "http://api.linkedin.com/v1/people/~/connections?format=json"
+    connection_data = oauth_client.request(url,access_token)
+    print connection_data
+    connections = json.loads(connection_data)
+    return connections

@@ -20,15 +20,18 @@ def register_service(user_info, unique_id=None, access_token=None, impersonate=N
         user = service.user
 
     screen_name = ''.join((user_info['firstName'], user_info['lastName']))
-    user.username = get_unique_username(screen_name)
-    user.first_name = user_info['firstName']
-    user.last_name = user_info['lastName']
+    if not user.username:
+        user.username = get_unique_username(screen_name)
+    if not user.first_name:
+        user.first_name = user_info['firstName']
+    if not user.last_name:
+        user.last_name = user_info['lastName']
     user.save()
 
     # update service
     service.user = user
     service.unique_id = unique_id
-    service.screen_name = screen_name
+    service.screen_name = screen_name[:20]
     service.impersonated_unique_id = impersonate or ''
     service.access_token = access_token
     service.save()

@@ -50,3 +50,26 @@ def get_connections(access_token):
     print connection_data
     connections = json.loads(connection_data)
     return connections
+
+def announce(access_token, link, message, picture, title):
+    url = "http://api.linkedin.com/v1/people/~/shares"
+    xml = """<?xml version="1.0" encoding="UTF-8"?>
+<share>
+  <comment>%s</comment>
+  <content>
+     <title>%s</title>
+     <submitted-url>%s</submitted-url>
+     <submitted-image-url>%s</submitted-image-url>
+  </content>
+  <visibility>
+     <code>anyone</code>
+  </visibility>
+</share>
+    """ % (message, title, link, picture)
+    try:
+        r,c = oauth_client.request(url, access_token=access_token, method="POST", body=xml, headers={'Content-Type':'text/xml'})
+    except Exception,e:
+        if "201" not in repr(e):
+            raise
+    return True
+    

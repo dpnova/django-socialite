@@ -1,5 +1,5 @@
 from django import template
-from socialite.apps.linkedin.helper import get_avatar
+from socialite.apps.facebook.helper import get_avatar
 
 register = template.Library()
 

@@ -129,8 +129,8 @@ def find_friends(access_token):
         friends = models.FacebookService.objects.filter(unique_id__in=facebook_ids)
     return friends
 
-def announce(access_token, message):
-    base_uri = urlparse.urljoin(api_url, 'me/feed')
+def announce(access_token, message, user_id="me"):
+    base_uri = urlparse.urljoin(api_url, '%s/feed' % user_id)
     q = get_mutable_query_dict({
         'access_token': access_token,
         'message': message,

@@ -9,7 +9,7 @@ try:
 except ImportError:
     import simplejson as json
 
-api_url = "https://api.linkedin.com/v1/" 
+api_url = "https://api.linkedin.com/v1/"
 oauth_url = "https://www.linkedin.com/uas/oauth/"
 
 oauth_actions = {
@@ -30,20 +30,20 @@ def get_unique_id(access_token, user_id=None):
         pass
     return user_info(access_token, user_id=user_id)['id']
 
-def user_info(access_token, user_id=None):
+def user_info(access_token, user_id=None,extra_fields=""):
     if user_id is None:
-        url = '%s?%s' % (urlparse.urljoin(api_url, 'people/~:(id,first-name,last-name,picture-url)'),"format=json")
+        url = '%s?%s' % (urlparse.urljoin(api_url, 'people/~:(id,first-name,last-name,picture-url%s)'%extra_fields),"format=json")
     else:
         url = '%s?%s' % (urlparse.urljoin(api_url, 'people/id=%s:(id,first-name,last-name,picture-url)'%user_id),"format=json")
     info = json.loads(oauth_client.request(url, access_token))
     return info
-    
-    
+
+
 def get_avatar(access_token=None,user_id=None):
     info = user_info(access_token,user_id)
     return info['pictureUrl']
-    
-    
+
+
 def get_connections(access_token):
     url = "http://api.linkedin.com/v1/people/~/connections?format=json"
     connection_data = oauth_client.request(url,access_token)
@@ -72,4 +72,4 @@ def announce(access_token, link, message, picture, title):
         if "201" not in repr(e):
             raise
     return True
-    
+

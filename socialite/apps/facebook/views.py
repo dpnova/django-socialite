@@ -38,7 +38,7 @@ def authenticate(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL)
             'unique_id': helper.get_unique_id(access_token),
         })
         return HttpResponseRedirect(redirect_to)
-    return HttpResponse('fail!') # TODO: real response
+    return HttpResponse('fail! This often happens because you dont have the auth backend installed.') # TODO: real response
 
 @helper.signed
 def canvas(request, data, template_name='facebook/canvas.html', extra_context=None):

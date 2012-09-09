@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib import messages
 
 from socialite.apps.base.oauth20 import decorators as oauth_decorators
 
@@ -25,7 +26,8 @@ def authorize(request, access_token, redirect_to=settings.LOGIN_REDIRECT_URL):
         message = "Facebook account added."
     else:
         message = "This Facebook account has already been adeed."
-    request.user.message_set.create(message=message)
+    messages.add_message(request, messages.INFO, message)
+    # request.user.message_set.create(message=message)
     return HttpResponseRedirect(redirect_to)
 
 @mediator.authenticate
